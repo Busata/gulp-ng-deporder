@@ -63,7 +63,10 @@ function gulpNGDeporder() {
             var hasEncountered = (declared_modules.indexOf(module_info.name) != -1);
 
             if (module_info.isRetrieval && !hasEncountered) {
-                undeclared_modules[module_info.name] = [file]; // Do not push modules that had no declaration yet
+                if (!(module_info.name in undeclared_modules))
+                    undeclared_modules[module_info.name] = []; // Do not push modules that had no declaration yet
+
+                undeclared_modules[module_info.name].push(file);
             }
 
         }

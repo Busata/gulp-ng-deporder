@@ -35,7 +35,7 @@ function gulpNGDeporder() {
     var stream = through.obj(function (file, enc, callback) {
         if (file.isNull()) {
             this.push(file);
-            callback();
+            return callback();
         }
         if (file.isStream()) {
             this.emit('error', new PluginError(PLUGIN_NAME, 'Streaming not supported'));
@@ -45,6 +45,7 @@ function gulpNGDeporder() {
             var module_info = getModuleInfo(file);
             if (typeof(module_info) == "undefined") {
                 this.push(file); // No angular module found, let it pass
+                return callback();
             }
 
             if (!module_info.isRetrieval) {

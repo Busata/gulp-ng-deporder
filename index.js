@@ -57,16 +57,18 @@ function gulpNGDeporder() {
                         this.push(undeclared_modules[module_info.name][i]); // Push any modules that were found earlier
                     }
                 }
-
             }
 
             var hasEncountered = (declared_modules.indexOf(module_info.name) != -1);
+            if (module_info.isRetrieval) {
+                if (hasEncountered) {
+                    this.push(file);
+                } else {
+                    if (!(module_info.name in undeclared_modules))
+                        undeclared_modules[module_info.name] = []; // Do not push modules that had no declaration yet
 
-            if (module_info.isRetrieval && !hasEncountered) {
-                if (!(module_info.name in undeclared_modules))
-                    undeclared_modules[module_info.name] = []; // Do not push modules that had no declaration yet
-
-                undeclared_modules[module_info.name].push(file);
+                    undeclared_modules[module_info.name].push(file);
+                }
             }
 
         }
